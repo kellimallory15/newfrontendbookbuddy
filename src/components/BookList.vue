@@ -88,8 +88,11 @@
                         <th scope="col">Published Date</th>
                         <th scope="col">Page Total</th>
                         <th scope="col">Series Number</th>
-                        <th scope="col">Update</th>
-                        <th scope="col">Delete</th> <!-- Potentially remove? Find the purpose of this-->
+                        <div v-if="this.is_superuser === 'true'">
+                            <th scope="col">Update</th>
+                            <th scope="col">Delete</th> <!-- Potentially remove? Find the purpose of this-->
+                        </div>
+
                     </tr>
                     </thead>
                     <tbody>
@@ -113,7 +116,7 @@
                     </tbody>
                 </table>
                 <!-- Only allow add of books when authenticated user -->
-                <div v-if="this.authenticated === 'true'">
+                <div v-if="this.is_superuser === 'true'">
                     <button type="button" class="btn btn-primary" @click="addNewBook">Add New Book</button>
                 </div>
             </div>

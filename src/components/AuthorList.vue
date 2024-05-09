@@ -52,10 +52,20 @@
                             <p><b>Author ID:</b> {{author.auth_id}}</p>
                             <!-- Again, if we want update/create dates, they would be input back here in listing -->
                             <div class="btn-group">
-                            <button @click="updateAuthor(author)" style="background-color: transparent; padding: 5;">
-                                <font-awesome-icon icon="pencil"/></button>
-                            <button @click="deleteAuthor(author)" style="background-color: transparent; padding: 5;">
-                                <font-awesome-icon icon="trash"/></button>
+                            <div v-if="this.is_superuser === 'true'" class="btn-group">
+                                <button @click="updateAuthor(author)" style="background-color: transparent; padding: 5;">
+                                    <font-awesome-icon icon="pencil"/></button>
+                                <button @click="deleteAuthor(author)" style="background-color: transparent; padding: 5;">
+                                    <font-awesome-icon icon="trash"/></button>
+                            </div>
+                            <div v-else>
+                                <button style="background-color: transparent; padding: 5px;" disabled>
+                                    <font-awesome-icon icon="pencil"/>
+                                </button>
+                                <button style="background-color: transparent; padding: 5px;" disabled>
+                                    <font-awesome-icon icon="trash"/>
+                                </button>
+                            </div>
                         </div>
                         </div>
                     </div>
@@ -73,8 +83,10 @@
                         <th scope="col">Birthday</th>
                         <th scope="col">Death</th>
                         <th scope="col">Author ID</th>
-                        <th scope="col">Update</th>
-                        <th scope="col">Delete</th>
+                        <div v-if="this.is_superuser === 'true'">
+                            <th scope="col">Update</th>
+                            <th scope="col">Delete</th>
+                        </div>
                         <!-- Commented out Delete button; unsure if needed for this section -->
                         <!--<th scope="col">Delete</th> -->
                     </tr>
@@ -88,17 +100,17 @@
                         <td>{{author.death_date}}</td>
                         <td>{{author.auth_id}}</td>
 
-                        <td v-if="this.authenticated === 'true'" @click="updateAuthor(author)"><button style="background-color: transparent; padding: 0;">
+                        <td v-if="this.is_superuser === 'true'" @click="updateAuthor(author)"><button style="background-color: transparent; padding: 0;">
                             <font-awesome-icon icon="pencil"/></button>
                         </td>
-                        <td v-if="this.authenticated === 'true'"  @click="deleteAuthor(author)"><button style="background-color: transparent; padding: 0;">
+                        <td v-if="this.is_superuser === 'true'"  @click="deleteAuthor(author)"><button style="background-color: transparent; padding: 0;">
                             <font-awesome-icon icon="trash"/></button>
                         </td>
                     </tr>
                     </tbody>
                 </table>
                 <!-- Only allow add of authors for admins -->
-                <div v-if="this.authenticated === 'true'">
+                <div v-if="this.is_superuser === 'true'">
                     <button type="button" class="btn btn-primary" @click="addNewAuthor">Add New Author</button>
                 </div>
             </div>
@@ -128,6 +140,7 @@
         }),
         mounted() {
             this.authenticated = localStorage.getItem("isAuthenticated")
+            this.is_superuser = localStorage.getItem("is_superuser")
             this.getAuthors();
             this.showMessages();
         },
