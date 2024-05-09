@@ -130,6 +130,7 @@
             showMsg: '',
             isMobile: false,
             authenticated: false,
+            is_superuser: false,
             headers: [
                 {text: 'Name', sortable: false, align: 'left',},
                 {text: 'Photo', sortable: false, align: 'left',},
